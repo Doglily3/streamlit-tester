@@ -1,13 +1,16 @@
 import streamlit as st
+import os
 from langchain_community.llms import OpenAI
 
 st.title('🦜🔗 Quickstart App')
 
-openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
+openai_api_key = st.sidebar.text_input('OpenAI API Key', type='default')
 model_version = st.sidebar.selectbox('Select Model Version', ['gpt-3.5-turbo', 'gpt-4'])
 
 def generate_response(input_text):
     if openai_api_key.startswith('sk-'):
+        print(f'...model_version:{model_version}....openai_api_key:{openai_api_key}')
+        os.environ["OPENAI_API_KEY"] = openai_api_key
         llm = OpenAI(model_name=model_version, temperature=0.7, openai_api_key=openai_api_key)
         response = llm(input_text)
         st.info(response)
